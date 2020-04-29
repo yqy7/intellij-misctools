@@ -1,0 +1,34 @@
+<idea-plugin>
+    <id>com.github.yqy7.intellij-misctools</id>
+    <name>misc tools</name>
+    <vendor email="qiyun.yqy@gmail.com" url="https://github.com/yqy7">yqy7</vendor>
+
+    <description><![CDATA[
+    This plugin provides some tools:
+    <ul>
+    <li>Base64</li>
+    <li>MD5</li>
+    </ul>
+    ]]></description>
+
+    <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow factoryClass="com.github.yqy7.misctools.MiscToolsToolWindowFactory" id="MiscTools" anchor="bottom" icon="AllIcons.General.ExternalTools"/>
+        <toolWindow factoryClass="com.github.yqy7.misctools.AllIconsToolWindowFactory" id="AllIconsToolWindow" anchor="right"/>
+    </extensions>
+
+    <actions>
+
+        <action id="testaction" class="com.github.yqy7.misctools.TestAction" text="test" description="test"/>
+    </actions>
+
+    <application-components>
+        <!-- 阻止成为动态插件 -->
+        <component>
+            <implementation-class>com.github.yqy7.misctools.MyApplicationComponent</implementation-class>
+        </component>
+    </application-components>
+</idea-plugin>
