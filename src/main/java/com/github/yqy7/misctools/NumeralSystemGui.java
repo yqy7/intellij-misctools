@@ -4,8 +4,6 @@ import java.util.function.UnaryOperator;
 
 import javax.swing.*;
 
-import com.intellij.openapi.ui.Messages;
-
 public class NumeralSystemGui {
     private JPanel rootPanel;
 
@@ -49,8 +47,54 @@ public class NumeralSystemGui {
         });
 
         floatButton.addActionListener(e -> {
-            Messages.showInfoMessage("功能开发中","Info");
+            convert(s -> {
+                StringBuilder stringBuilder = new StringBuilder();
+
+                if (unsetRadioButton.isSelected() || a64BitRadioButton.isSelected()) {
+                    // 64位: 1,11,52
+                    double num = Double.parseDouble(s);
+                    long rawLongBits = Double.doubleToRawLongBits(num);
+                    stringBuilder.append(Util.addPrefixZero(Long.toBinaryString(rawLongBits), 64));
+                    stringBuilder.insert(1, ',');
+                    stringBuilder.insert(13, ',');
+
+                    appendInfo(stringBuilder, 1023);
+                } else {
+                    // 32位: 1,8,23
+                    float num = Float.parseFloat(s);
+                    int rawIntBits = Float.floatToRawIntBits(num);
+                    stringBuilder.append(Util.addPrefixZero(Integer.toBinaryString(rawIntBits), 32));
+                    stringBuilder.insert(1, ',');
+                    stringBuilder.insert(10, ',');
+
+                    appendInfo(stringBuilder, 127);
+                }
+                return stringBuilder.toString();
+            });
         });
+    }
+
+    private void appendInfo(StringBuilder stringBuilder, int bias) {
+        String numStr = stringBuilder.toString();
+        String[] split = numStr.split(",");
+        long exponent = Util.decodeLong("0b" + split[1]) - bias;
+        stringBuilder.append("\n阶码: ");
+        stringBuilder.append(exponent);
+
+        StringBuilder stringBuilder1 = new StringBuilder();
+        stringBuilder1.append("1");
+        stringBuilder1.append(split[2]);
+        if (exponent >= 0) {
+            stringBuilder1.insert((int)exponent + 1, ".");
+        } else {
+            int t = (int)-exponent;
+            for (int i = 0; i < t; i++) {
+                stringBuilder1.insert(0, "0");
+            }
+            stringBuilder1.insert(1, ".");
+        }
+        stringBuilder.append("\n尾数转换后: ");
+        stringBuilder.append(stringBuilder1);
     }
 
     private void convert(UnaryOperator<String> converter) {
