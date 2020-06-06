@@ -28,5 +28,9 @@ public class MiscToolsToolWindowFactory implements ToolWindowFactory {
         QRCodeGui qrCodeGui = new QRCodeGui();
         Content qrCodeContent = SERVICE.getInstance().createContent(qrCodeGui.getRootPanel(), "QRCode", false);
         contentManager.addContent(qrCodeContent);
+
+        MiscGui miscGui = new MiscGui();
+        Content miscContent = SERVICE.getInstance().createContent(miscGui.getRootPanel(), "Misc", false);
+        contentManager.addContent(miscContent);
     }
 }
